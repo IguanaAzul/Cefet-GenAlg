@@ -12,6 +12,8 @@ class Individuo:
 
 
 def reproduce(pais, n_filhos, taxa_mutacao, taxa_crossover):
+    # Recebe os pais a reproduzir, o número de filhos e as taxas
+    # Gera os indivíduos da próxima geração
     inherits1 = np.random.random(n_filhos)
     inherits2 = np.random.random(n_filhos)
     crossoverx = np.random.random(n_filhos)
@@ -62,6 +64,7 @@ def reproduce(pais, n_filhos, taxa_mutacao, taxa_crossover):
 
 
 def evaluate(individuos):
+    # Ordena os indivíduos de melhor a pior
     results = list()
     for individuo in individuos:
         results.append(bird_function(individuo.x, individuo.y))
@@ -75,11 +78,16 @@ def evaluate(individuos):
 generations = 10
 n_individuos = 100
 n_selecionados_por_geracao = 10
-individuos = [Individuo(np.random.random(1) * 10, np.random.random(1) * 10) for i in range(n_individuos)]
+taxa_crossover = 1/3
+taxa_mutacao = 0.05
+# Gera N indivíduos com coordenadas inicializadas aleatoriamente entre -10 e 10
+individuos = [Individuo(np.random.random(1) * 20 - 10, np.random.random(1) * 20 - 10) for i in range(n_individuos)]
 
+# Executa as gerações
 for gen in range(generations):
-    print("Geração ", gen)
+    print("Geração ", gen+1)
     results, individuos = evaluate(individuos)
-    individuos = reproduce(individuos[:n_selecionados_por_geracao], n_individuos, 1/3, 0.05)
+    # Coloca os N melhores indivíduos da geração para reproduzir
+    individuos = reproduce(individuos[:n_selecionados_por_geracao], n_individuos, taxa_crossover, taxa_mutacao)
     print("Mínimo obtido na geração: ", results[0])
     print("Coordenadas do melhor indivíduo: ", individuos[0].x, individuos[0].y)
