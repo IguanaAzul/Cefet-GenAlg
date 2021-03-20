@@ -88,6 +88,6 @@ for gen in range(generations):
     print("Geração ", gen+1)
     results, individuos = evaluate(individuos)
     # Coloca os N melhores indivíduos da geração para reproduzir
-    individuos = reproduce(individuos[:n_selecionados_por_geracao], n_individuos, taxa_crossover, taxa_mutacao)
     print("Mínimo obtido na geração: ", results[0])
-    print("Coordenadas do melhor indivíduo: ", individuos[0].x, individuos[0].y)
+    print("Coordenadas do melhor indivíduo: (", individuos[0].x, ",", individuos[0].y, ")")
+    individuos = reproduce(individuos[:n_selecionados_por_geracao], n_individuos, taxa_crossover, taxa_mutacao)
