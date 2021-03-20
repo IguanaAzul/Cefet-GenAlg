@@ -11,7 +11,7 @@ class Individuo:
         self.y = y
 
 
-def reproduce(pais, n_filhos):
+def reproduce(pais, n_filhos, taxa_mutacao, taxa_crossover):
     inherits1 = np.random.random(n_filhos)
     inherits2 = np.random.random(n_filhos)
     crossoverx = np.random.random(n_filhos)
@@ -22,19 +22,19 @@ def reproduce(pais, n_filhos):
     ys = np.zeros(n_filhos)
     filhos = list()
     for idx in range(n_filhos):
-        mutationsx[idx] = np.random.random(1) / 2 + 0.75 if mutationsx[idx] > 0.95 else 1
-        mutationsy[idx] = np.random.random(1) / 2 + 0.75 if mutationsy[idx] > 0.95 else 1
+        mutationsx[idx] = np.random.random(1) / 2 + 0.75 if mutationsx[idx] > 1 - taxa_mutacao else 1
+        mutationsy[idx] = np.random.random(1) / 2 + 0.75 if mutationsy[idx] > 1 - taxa_mutacao else 1
         inherits1[idx] = (np.abs(np.linspace(0, 1, len(pais)) - inherits1[idx])).argmin()
         inherits2[idx] = (np.abs(np.linspace(0, 1, len(pais)) - inherits2[idx])).argmin()
-        if crossoverx[idx] < 1/3:
+        if crossoverx[idx] < (1-taxa_crossover)/2:
             crossoverx[idx] = 0
-        elif crossoverx[idx] < 2/3:
+        elif crossoverx[idx] < (1-taxa_crossover):
             crossoverx[idx] = 1
         else:
             crossoverx[idx] = 2
-        if crossovery[idx] < 1/3:
+        if crossovery[idx] < (1-taxa_crossover)/2:
             crossovery[idx] = 0
-        elif crossovery[idx] < 2/3:
+        elif crossovery[idx] < (1-taxa_crossover):
             crossovery[idx] = 1
         else:
             crossovery[idx] = 2
@@ -80,5 +80,6 @@ individuos = [Individuo(np.random.random(1) * 10, np.random.random(1) * 10) for 
 for gen in range(generations):
     print("Geração ", gen)
     results, individuos = evaluate(individuos)
-    individuos = reproduce(individuos[:n_selecionados_por_geracao], n_individuos)
+    individuos = reproduce(individuos[:n_selecionados_por_geracao], n_individuos, 1/3, 0.05)
     print("Mínimo obtido na geração: ", results[0])
+    print("Coordenadas do melhor indivíduo: ", individuos[0].x, individuos[0].y)
